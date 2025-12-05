@@ -2,8 +2,6 @@ use std::env::current_dir;
 
 use git2::{Config, IndexAddOption, Repository, Signature, Tree};
 
-use crate::version::Version;
-
 /// Performs Git related operations in the crate's repository
 pub struct Git {
     email: String,
@@ -77,13 +75,12 @@ impl Git {
     }
 
     /// Creates a Git Tag with the provided `Version`
-    pub fn tag(&self, version: &Version, message: &str) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn tag(&self, version_str: &str, message: &str) -> Result<(), Box<dyn std::error::Error>> {
         let tagger = self.signature()?;
         let head = self.repo.head()?.peel_to_commit()?;
         let obj = head.as_object();
 
-        self.repo
-            .tag(&version.to_string(), obj, &tagger, message, false)?;
+        self.repo.tag(version_str, obj, &tagger, message, false)?;
 
         Ok(())
     }
