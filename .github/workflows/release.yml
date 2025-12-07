@@ -76,4 +76,11 @@ jobs:
           CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        run: |
+          gh release create "v$CRATE_VERSION" \
+            --title "v$CRATE_VERSION" \
+            --draft=false \
+            --generate-notes \
+            --prerelease=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
